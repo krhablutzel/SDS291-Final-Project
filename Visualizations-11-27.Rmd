@@ -1,0 +1,56 @@
+---
+title: "Open-Data-11-27"
+author: "Kathleen Hablutzel"
+date: "11/27/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(ipumsr)
+library(janitor)
+```
+
+```{r}
+ddi <- read_ipums_ddi("meps_00002.xml")
+data <- read_ipums_micro(ddi)
+```
+
+```{r}
+data <- filter(data, USUALPL > 0, COVERTYPE > 0, USUALPL != 7, USUALPL != 9)
+```
+
+```{r}
+data%>%
+  tabyl(USUALPL) %>% 
+  adorn_totals(where = c("row","col"))%>%
+  adorn_pct_formatting(digits = 0)
+```
+
+```{r}
+data%>%
+  tabyl(COVERTYPE) %>% 
+  adorn_totals(where = c("row","col"))%>%
+  adorn_pct_formatting(digits = 0)
+```
+
+```{r}
+ggplot(data, aes(FTOTINCMEPS)) + geom_histogram(bins=50)
+```
+
+```{r}
+Model <- glm(as.factor(USUALPL) ~ FTOTINCMEPS+as.factor(COVERTYPE)+as.factor(RACEA)+AGE, family=binomial(), data)
+
+summary(Model)
+```
+
+```{r}
+ggplot(data, aes(as.factor(USUALPL), FTOTINCMEPS)) + geom_boxplot()
+```
+
+```{r}
+ggplot(data, aes(as.factor(COVERTYPE), fill=as.factor(USUALPL))) + geom_bar(position="fill")
+```
+
+

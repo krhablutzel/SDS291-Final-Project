@@ -1,0 +1,194 @@
+---
+title: "Measuring Healthcare Access:"
+subtitle: "Are Income and Healthcare Coverage Associated with whether Americans have a Usual Place of Care?"
+author: "Ivy Chen, Juliet Ramey-Lariviere, and Kathleen Hablutzel"
+date: "12/1/2020"
+output:
+  pdf_document:
+    fig_width: 6
+    fig_height: 4
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE
+  )
+library(tidyverse)
+library(ipumsr)
+library(janitor)
+library(ggthemes)
+```
+
+# Purpose
+
+We know that many Americans struggle with access to healthcare. Some are so disconnected from the healthcare system that they do not have a usual place for medical care. We want to study factors that may affect whether someone has a usual place for medical care, such as family income and type of insurance coverage. Thus, our primary hypothesis is that there is a statistically significant difference in whether someone has a usual place for medical care based on family income, when controlling for age, race, and insurance coverage type. We also have a secondary hypothesis that there is a statistically significant difference in whether someone has a usual place for medical care based on insurance coverage type, when controlling for age, race, and family income.
+
+# Data
+
+We plan to use data from the Medical Expenditure Panel Survey Household Component (hereafter referred to as MEPS) for the year 2018, as stored in the [IPUMS MEPS archive](https://meps.ipums.org/meps/). MEPS is a survey produced by the Agency for Healthcare Research and Quality (AHRQ), part of the US Government’s Department of Health & Human Services. Surveys were issued to subsets of households that had responded to the National Health Interview Survey in the previous year. The data was collected in five interviews conducted over a two-year period. For 2018, there are 30,461 individuals in the original dataset. Because the surveys were filled out for households, the original data is not independent. To account for this, we plan to select a random individual from each household in our analysis to satisfy the independence assumption.
+
+# Population
+
+Each case is an individual from a household which filled out a survey circulated by the Medical Expenditure Panel. The Panel required participants to be 18 years old or older, but participants also filled out information for minors in their household. Those eligible to respond are all non-institutionalized US citizens. The population of interest is all US citizens, which is around 328.2 million people (Census Bureau).
+
+# Outcome Variable
+
+The response variable is [**HasUsualPlace**](https://meps.ipums.org/meps-action/variables/USUALPL). This is a binary variable with values Yes and No. We will be excluding those who responded with “I don’t know” and those who refused to answer.
+
+# Explanatory Variables
+
+All explanatory variables in this dataset are self-reported.
+
+## Primary Variable
+
+[**Income:**](https://meps.ipums.org/meps-action/variables/FTOTINCMEPS) 
+This variable collects information about the total income of a household (in US dollars). This data can be negative if the household is in debt for the year, such as debt from a business or farm.
+
+## Secondary Variable
+
+[**Insurance:**](https://meps.ipums.org/meps-action/variables/COVERTYPE) 
+This variable collects information about an individual's insurance type: private, public, or uninsured.
+
+## Control Variables
+
+[**Age:**](https://nhis.ipums.org/nhis-action/variables/AGE) 
+This variable collects information about a participant’s age in years. There are no “unknown” ages in the dataset.
+
+[**Race:**](https://meps.ipums.org/meps-action/variables/RACEA) 
+This variable collects a person’s self identified race or ethnicity. Categories included are:
+
+* White
+* Black/African-American
+* Alaskan Native or American Indian
+* Asian
+* Pacific Islander
+* Multiple Race, including Asian, excluding Black and White
+* Multiple Race, including Asian and Black, excluding White
+* Multiple Race, including Asian and White, excluding Black
+* Multiple Race, including Black, excluding Asian and White
+* Multiple Race, including Black and White, excluding Asian
+* Multiple Race, including White, excluding Asian and Black
+* Multiple Race, including Asian, White, and Black
+* Multiple Race, excluding Asian, White, and Black
+
+# Exploratory Visualizations
+
+```{r}
+# read in data
+ddi <- read_ipums_ddi("meps_00003.xml")
+initialData <- read_ipums_micro(ddi)
+```
+
+```{r}
+# rename data for ease of use
+data <- initialData %>%
+  rename(Age = AGE,
+         Race = RACEA,
+         Income = FTOTINCMEPS,
+         HasUsualPlace = USUALPL,
+         Insurance = COVERTYPE)
+
+data$Race <- data$Race %>%
+  as.factor() %>%
+  recode(`100` = "White",
+         `200` = "Black/African-American",
+         `310` = "Alaskan Native or American Indian",
+         `410` = "Asian",
+         `420` = "Pacific Islander",
+         `610` = "Multiple Race, including Asian, excluding Black and White",
+         `611` = "Multiple Race, including Asian and Black, excluding White",
+         `612` = "Multiple Race, including Asian and White, excluding Black",
+         `613` = "Multiple Race, including Black, excluding Asian and White",
+         `614` = "Multiple Race, including Black and White, excluding Asian",
+         `615` = "Multiple Race, including White, excluding Asian and Black",
+         `616` = "Multiple Race, including Asian, White, and Black",
+         `617` = "Multiple Race, excluding Asian, White, and Black"
+         )
+
+data$HasUsualPlace <- data$HasUsualPlace %>%
+  as.factor() %>%
+  recode(`0` = "N/A",
+         `1` = "No",
+         `2` = "Yes",
+         `7` = "N/A",
+         `9` = "N/A"
+         )
+
+data$Insurance <- data$Insurance %>%
+  as.factor() %>%
+  recode(`1` = "Private",
+         `2` = "Public",
+         `4` = "Uninsured"
+         )
+```
+
+```{r}
+# remove non-binary HasUsualPlace data
+data <- data %>%
+  filter(HasUsualPlace != "N/A")
+
+```
+
+```{r, eval=FALSE}
+# has usual place counts
+data%>%
+  tabyl(HasUsualPlace) %>% 
+  adorn_totals(where = c("row","col"))%>%
+  adorn_pct_formatting(digits = 0)
+```
+
+```{r, eval=FALSE}
+# insurance category distribution table
+data%>%
+  tabyl(Insurance) %>% 
+  adorn_totals(where = c("row","col"))%>%
+  adorn_pct_formatting(digits = 0)
+```
+
+```{r, eval=FALSE}
+# has usual place by insurance
+data%>%
+  tabyl(Insurance, HasUsualPlace) %>% 
+  adorn_percentages("row") %>%
+  adorn_pct_formatting(digits = 0)
+```
+
+```{r, eval=FALSE}
+# histogram - counts of incomes - not included
+ggplot(data, aes(Income)) +
+  geom_histogram(bins=50)
+```
+
+```{r, eval=FALSE}
+# test model - not included
+Model <- glm(as.factor(HasUsualPlace) ~ Income+as.factor(Insurance)+as.factor(Race)+Age, family=binomial(), data)
+
+summary(Model)
+```
+
+```{r}
+# income boxplot
+ggplot(data, aes(HasUsualPlace, Income, fill=HasUsualPlace)) + 
+  geom_boxplot() +
+  theme_fivethirtyeight() +
+  labs(title = "Household Incomes vs. Whether Individual Has Usual Place for Medical Care") +
+  theme(axis.title = element_text(size=14),
+        title = element_text(size=5),
+        legend.position = "none")
+```
+
+For our primary explanatory variable, income, we created boxplots of incomes for individuals with and without usual places for medical care. While the difference in median income between the groups seems small in this plot, we believe that due to the large scale of incomes and the large number of participants, this difference may still be significant. 
+
+```{r}
+# insurance stacked bar chart
+ggplot(data, aes(Insurance, fill=HasUsualPlace)) +
+  geom_bar(position="fill")  +
+  theme_fivethirtyeight() +
+  labs(title = "Whether Individual Has Usual Place for Medical Care by Insurance Coverage") +
+  ylab("Proportion") +
+  theme(axis.title = element_text(size=14),
+        title = element_text(size=5),
+        legend.position = "none")
+```
+
+For our secondary explanatory variable, insurance coverage, we created a stacked bar chart among our three categories of insurance coverage: private, public, and uninsured. We noticed a large difference in the proportion of uninsured individuals who have a usual place for medical care (only 39%) versus private or public insurance (79% and 83%, respectively). We definitely expect there to be a statistically significant difference in whether a participant has a usual place for medical care between uninsured participants and the other two groups. Based on the large sample size, we might also expect a significant difference between private and public insurance, as well.

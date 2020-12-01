@@ -1,0 +1,17 @@
+---
+title: "Open-Data-11-27"
+author: "Kathleen Hablutzel"
+date: "11/27/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(ipumsr)
+```
+
+```{r}
+ddi <- read_ipums_ddi("meps_00003.xml")
+data <- read_ipums_micro(ddi)
+```

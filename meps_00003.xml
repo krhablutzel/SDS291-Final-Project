@@ -1,0 +1,698 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="ipums-ddi-xslt.xsl"?>
+<codeBook xmlns="ddi:codebook:2_5" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="ddi:codebook:2_5 http://www.ddialliance.org/Specification/DDI-Codebook/2.5/XMLSchema/codebook.xsd" version="2.5" ID="ddi2-33124_meps_00003.dat-meps.ipums.org">
+  <docDscr>
+    <citation>
+      <titlStmt>
+        <titl>Codebook for an for an IPUMS Health Surveys: Medical Expenditure Panel Survey Data Extract</titl>
+        <subTitl>DDI 2.5 metadata describing the extract file  'meps_00003.dat'</subTitl>
+        <IDNo>ddi2-33124_meps_00003.dat-meps.ipums.org</IDNo>
+      </titlStmt>
+      <rspStmt>
+        <AuthEnty affiliation="University of Minnesota">Minnesota Population Center</AuthEnty>
+      </rspStmt>
+      <prodStmt>
+        <producer abbr="MPC" affiliation="University of Minnesota" role="Documentation">Minnesota Population Center</producer>
+        <prodDate date="2020-11-27">November 27, 2020</prodDate>
+        <prodPlac>Minnesota Population Center, 50 Willey Hall, 225 - 19th Avenue South, Minneapolis, MN 55455</prodPlac>
+      </prodStmt>
+      <distStmt>
+        <contact affiliation="University of Minnesota" URI="http://pop.umn.edu">Minnesota Population Center</contact>
+      </distStmt>
+    </citation>
+  </docDscr>
+  <stdyDscr>
+    <citation>
+      <titlStmt>
+        <titl>User Extract meps_00003.dat</titl>
+      </titlStmt>
+      <rspStmt>
+        <AuthEnty affiliation="University of Minnesota">Minnesota Population Center</AuthEnty>
+      </rspStmt>
+      <prodStmt>
+        <producer abbr="MPC" affiliation="University of Minnesota" role="Documentation">Minnesota Population Center</producer>
+        <prodDate date="2020-11-27">November 27, 2020</prodDate>
+        <prodPlac>Minnesota Population Center, 50 Willey Hall, 225 - 19th Avenue South, Minneapolis, MN 55455</prodPlac>
+      </prodStmt>
+      <distStmt>
+        <contact affiliation="University of Minnesota" URI="http://pop.umn.edu">Minnesota Population Center</contact>
+      </distStmt>
+      <serStmt>
+        <serName abbr="meps">IPUMS MEPS</serName>
+        <serInfo>DOI:10.18128/D071.V1.1</serInfo>
+      </serStmt>
+      <verStmt>
+        <version date="2020-11-27"/>
+      </verStmt>
+    </citation>
+    <stdyInfo>
+      <subject>
+        <topcClas vocab="IPUMS">Technical Variables -- ANNUAL</topcClas>
+        <topcClas vocab="IPUMS">Core Demographic Variables -- ANNUAL</topcClas>
+        <topcClas vocab="IPUMS">Ethnicity/Nativity Variables -- ANNUAL</topcClas>
+        <topcClas vocab="IPUMS">Total Income and Earnings Variables -- ANNUAL</topcClas>
+        <topcClas vocab="IPUMS">Access to Care Variables -- ANNUAL</topcClas>
+        <topcClas vocab="IPUMS">General Coverage Variables -- ANNUAL</topcClas>
+      </subject>
+      <sumDscr ID="sdatref-23">
+        <timePrd event="single" date="2018">2018</timePrd>
+        <nation abbr="us">United States</nation>
+      </sumDscr>
+      <notes><![CDATA[Additional notes on a sample that is part of this study:  ; regular size
+]]></notes>
+    </stdyInfo>
+    <dataAccs>
+      <useStmt>
+        <confDec required="yes"><![CDATA[The Public Health Service Act (Section 308 (d)) provides that the data collected by the National Center for Health Statistics (NCHS), Centers for Disease Control and Prevention (CDC), may be used only for the purpose of health statistical reporting and analysis. Any effort to determine the identity of any reported case is prohibited by this law. NCHS does all it can to assure that the identity of data subjects cannot be disclosed. All direct identifiers, as well as any characteristics that might lead to identification, are omitted from the data files. Any intentional identification or disclosure of a person or establishment violates the assurances of confidentiality given to the providers of the information. 
+
+Therefore, users will: 
+
+Use the data in these data files for statistical reporting and analysis only. 
+
+Make no use of the identity of any person or establishment discovered inadvertently and advise the Director, NCHS, of any such discovery (301-458-4500). 
+
+Not link these data files with individually identifiable data from other NCHS or non-NCHS data files. 
+
+By using these data, you signify your agreement to comply with the above-stated statutorily-based requirements. ]]></confDec>
+        <contact affiliation="Minnesota Population Center" URI="http://www.meps.ipums.org/">IPUMS Health Surveys: Medical Expenditure Panel Survey</contact>
+        <citReq><![CDATA[Publications and research reports based on the MEPS database must cite it appropriately.  The citation is as follows:
+
+Lynn A. Blewett, Julia A. Rivera Drew, Risa Griffin, Kari C.W. Williams, and Daniel Backman. IPUMS Health Surveys: Medical Expenditure Panel Survey, Version 1.0 [dataset]. Minneapolis: University of Minnesota, 2018. http://doi.org/10.18128/D071.V1.0
+
+Please see http://www.meps.ipums.org/meps/citation.shtml for precise formatting of the citation.]]></citReq>
+        <conditions><![CDATA[The Public Health Service Act (Section 308 (d)) provides that the data collected by the National Center for Health Statistics (NCHS), Centers for Disease Control and Prevention (CDC), may be used only for the purpose of health statistical reporting and analysis. Any effort to determine the identity of any reported case is prohibited by this law. NCHS does all it can to assure that the identity of data subjects cannot be disclosed. All direct identifiers, as well as any characteristics that might lead to identification, are omitted from the data files. Any intentional identification or disclosure of a person or establishment violates the assurances of confidentiality given to the providers of the information. 
+
+Therefore, users must: 
+
+Use the data in these data files for statistical reporting and analysis only. 
+
+Make no use of the identity of any person or establishment discovered inadvertently and advise the Director, NCHS, of any such discovery (301-458-4500). 
+
+Not link these data files with individually identifiable data from other NCHS or non-NCHS data files. 
+
+By using these data, you signify your agreement to comply with the above-stated statutorily-based requirements. 
+
+Furthermore, users of MEPS data must agree to abide by the conditions of use. Users must agree to the following conditions:
+  
+  
+(1) Use the data in these data files for statistical reporting and analysis only 
+
+(2) Make no use of the identity of any person or establishment discovered inadvertently and advise the Director of NCHS of any such discovery (301-458-4500) 
+
+(3) Do not link these data with individually-identifiable data from NCHS or non-NCHS data files 
+
+(4) No fees may be charged for use or distribution of the data.  All persons are granted a limited license to use and distribute these data, but you may not charge a fee for the data if you distribute them to others. 
+
+(5) Cite the MEPS appropriately.  Publications and research reports based on the database must cite it appropriately.  Please see http://www.meps.ipums.org/meps/citation.shtml
+
+(6) MEPS cannot be used to study small geographic areas.  The smallest geographical areas identified in the MEPS are regions (groups of states) and a limited number of metropolitan areas.
+
+(7) This system provides individual-level data only.  The MEPS Data Extraction System will not produce tables. You will need to use a statistical software package, such as Stata, SAS, or SPSS, to analyze the downloaded data.  Alternatively, you may use the MEPS-SDA tabulator to produce tables online, without making a data extract.]]></conditions>
+        <disclaimer>The user of the data acknowledges that the original collector of the data, the authorized distributor of the data, and the relevant funding agency bear no responsibility for use of the data or for interpretations or inferences based upon such uses.</disclaimer>
+      </useStmt>
+    </dataAccs>
+    <notes><![CDATA[User-provided description:  Revision of (Access to care variables)]]></notes>
+    <notes>This extract is a revision of the user's previous extract, number 2.</notes>
+  </stdyDscr>
+  <fileDscr ID="ExtractData">
+    <fileTxt>
+      <fileName>meps_00003.dat</fileName>
+      <fileCont>Microdata records</fileCont>
+      <fileStrc type="rectangular">
+      </fileStrc>
+      <fileType charset="ISO-8859-1">ISO-8859-1 data file</fileType>
+      <format>fixed length fields</format>
+      <filePlac>Minnesota Population Center, 50 Willey Hall, 225 - 19th Avenue South, Minneapolis, MN 55455</filePlac>
+    </fileTxt>
+  </fileDscr>
+  <dataDscr>
+    <var ID="YEAR" files="ExtractData" name="YEAR" intrvl="contin" dcml="0">
+      <location StartPos="1" width="4" EndPos="4"/>
+      <labl>Survey year</labl>
+      <txt><![CDATA[YEAR is a four-digit variable reporting the calendar year (e.g., 2003) the survey was conducted and the data were collected.  YEAR indicates the survey year on the person record.]]></txt>
+      <codInstr><![CDATA[This is a 4-digit numeric variable with 0 implied decimal places]]></codInstr>
+      <concept vocab="IPUMS">Technical Variables -- ANNUAL</concept>
+      <varFormat schema="other" type="numeric"/>
+    </var>
+    <var ID="PERNUM" files="ExtractData" name="PERNUM" intrvl="contin" dcml="0">
+      <location StartPos="5" width="2" EndPos="6"/>
+      <labl>Person number within family (from reformatting)</labl>
+      <txt><![CDATA[PERNUM is an IPUMS MEPS-constructed variable that numbers all persons within each  household consecutively (starting with "1") in the order in which they appear in the original MEPS data.  PERNUM was created by IPUMS MEPS during the process of reformatting the original MEPS public use files.]]></txt>
+      <codInstr><![CDATA[
+PERNUM is a 2-digit numeric variable.]]></codInstr>
+      <concept vocab="IPUMS">Technical Variables -- ANNUAL</concept>
+      <varFormat schema="other" type="numeric"/>
+    </var>
+    <var ID="DUID" files="ExtractData" name="DUID" intrvl="contin" dcml="0">
+      <location StartPos="7" width="7" EndPos="13"/>
+      <labl>Dwelling unit ID</labl>
+      <txt><![CDATA[For all persons, DUID reports the identifier assigned by MEPS to the person's Dwelling Unit (DU), sampled for MEPS data collection. DUID is a random ID number assigned after the DU was sampled for MEPS and does not change once assigned. The MEPS sample [URL omitted from DDI.] is a subset of the households that participated in the National Health Interview Survey (NHIS). 
+
+DU definitions are generally consistent with NHIS definitions of households. For example, the 2018 NHIS Survey Description [URL omitted from DDI.] document describes households as "occupied housing units" (p. 10) that exclude "long-term care institutions (for example, nursing homes for the elderly, hospitals for the chronically ill or physically or intellectually disabled, and wards for abused or neglected children), correctional facilities (for example, prisons or jails, juvenile detention centers, and halfway houses)." (p. 8). Additionally, "unless one other family member is a civilian eligible for the survey (for example, a child whose parents are both active-duty military)" (p. 8), housing units occupied by active-duty Armed Forces personnel are also excluded from the survey. 
+
+From 1996-2017, DUID is unique within panel, but must be combined with PANEL to be unique across panels. Starting in 2018, DUID begins with the 2-digit variable PANEL, making DUID unique across panels. DUID can be combined with PID to uniquely identify each person within the Dwelling Unit. Please see the user note [URL omitted from DDI.] for more information on the relationship between Dwelling Units, families, Reporting Units, and persons.]]></txt>
+      <codInstr><![CDATA[DUID is a numeric variable ranging in width from 1 to 7 digits.]]></codInstr>
+      <concept vocab="IPUMS">Technical Variables -- ANNUAL</concept>
+      <varFormat schema="other" type="numeric"/>
+    </var>
+    <var ID="PID" files="ExtractData" name="PID" intrvl="contin" dcml="0">
+      <location StartPos="14" width="3" EndPos="16"/>
+      <labl>Person number</labl>
+      <txt><![CDATA[For all persons, PID is a within-Dwelling Unit (DU) person identifier assigned in sampling or by the computer-assisted personal interviewing (CAPI) instrument. PID must be combined with DUID and PANEL to uniquely identify persons across all MEPS data. IPUMS MEPS offers the constructed variable MEPSID, created by concatenating the values of DUID, PID, and PANEL. 
+
+Please see the user note [URL omitted from DDI.] for more information on the relationship between Dwelling Units, families, Reporting Units, and persons.]]></txt>
+      <codInstr><![CDATA[
+PID is a 3-digit numeric variable.]]></codInstr>
+      <concept vocab="IPUMS">Technical Variables -- ANNUAL</concept>
+      <varFormat schema="other" type="character"/>
+    </var>
+    <var ID="MEPSID" files="ExtractData" name="MEPSID" intrvl="contin" dcml="0">
+      <location StartPos="17" width="10" EndPos="26"/>
+      <labl>MEPS unique identifier (IPUMS generated)</labl>
+      <txt><![CDATA[For all persons, MEPSID is a variable that uniquely identifies respondents across MEPS panels. It is created by combining PANEL, DUID, and PID. IPUMS MEPS staff create MEPSID for the 1996-2017 samples to provide a single, universal linking key for MEPS persons. Beginning in 2018, AHRQ modified the identifiers DUID and DUPERSID (which combines DUID with PID) on the original MEPS data files to append information about PANEL to the first two columns. This update makes DUPERSID identical to MEPSID in the IPUMS MEPS extract system for 2018-forward.
+
+In earlier versions of IPUMS MEPS, IPUMS MEPS staff created a slightly different version of MEPSID, equivalent to combining DUID, PID, and PANEL. This version has been renamed to MEPSID2 and is only available for 1996-2017.]]></txt>
+      <codInstr><![CDATA[This is a 10-digit numeric variable with 0 implied decimal places]]></codInstr>
+      <concept vocab="IPUMS">Technical Variables -- ANNUAL</concept>
+      <varFormat schema="other" type="character"/>
+    </var>
+    <var ID="PSUANN" files="ExtractData" name="PSUANN" intrvl="contin" dcml="0">
+      <location StartPos="27" width="3" EndPos="29"/>
+      <labl>Annual primary sampling unit (PSU) for variance estimation</labl>
+      <txt><![CDATA[PSUANN is the annual primary sampling unit variable that represents the impact of sample design clustering on the estimates of variance and standard errors. It is appropriate to use PSUANN to generate annual estimates for all years. For pooled analyses including years before 2002, analysts should instead use the pooled primary sampling unit variable, PSUPLD. For analyses limited to years 2002 and later, PSUANN is suitable for use in annual and pooled analyses.
+
+PSUANN is constant within a sample design period and changes between sample design periods. For analysis, researchers need to use PSUANN in conjunction with STRATANN to account for stratification and clustering when computing variance estimates with IPUMS MEPS data.]]></txt>
+      <codInstr><![CDATA[
+PSUANN is a 3-digit numeric variable.
+
+000:	Not in Universe]]></codInstr>
+      <concept vocab="IPUMS">Technical Variables -- ANNUAL</concept>
+      <varFormat schema="other" type="numeric"/>
+    </var>
+    <var ID="AGE" files="ExtractData" name="AGE" intrvl="contin" dcml="0">
+      <location StartPos="30" width="2" EndPos="31"/>
+      <labl>Age</labl>
+      <txt><![CDATA[AGE reports the individual's exact age, calculated from date of birth, as of the last day (12/31) of the survey year. 
+
+
+Date of birth and age were asked for each reporting unit member, and then exact age was calculated from date of birth. Where the calculated age and the age provided did not match, inconsistencies were reviewed and resolved. When date of birth was not provided, but age was provided, the month and year of birth were assigned randomly from among the possible valid options. For any cases still not accounted, age was imputed using:
+(1) the mean age difference between MEPS participants with certain family relationships (where available) or  
+(2) the mean age value for MEPS participants.
+]]></txt>
+      <codInstr><![CDATA[
+
+
+
+AGE is a 2-digit-numeric variable.
+
+85:	Top code for 85 years or older (2001-forward)
+90:	Top code for 90 years or older (1996-2000)
+99:	Missing]]></codInstr>
+      <concept vocab="IPUMS">Core Demographic Variables -- ANNUAL</concept>
+      <varFormat schema="other" type="numeric"/>
+    </var>
+    <var ID="RACEA" files="ExtractData" name="RACEA" intrvl="discrete" dcml="0">
+      <location StartPos="32" width="3" EndPos="34"/>
+      <labl>Main Racial Background (Pre-1997 Revised OMB Standards), self-reported or interviewer reported</labl>
+      <txt><![CDATA[RACEA reports the race of the respondent. If not ascertained, the race and/or ethnicity were assigned based on relationship to other members of the DU using a priority ordering that gave precedence to blood relatives in the immediate family.]]></txt>
+      <catgry>
+        <catValu>100</catValu>
+        <labl>White</labl>
+      </catgry>
+      <catgry>
+        <catValu>200</catValu>
+        <labl>Black/African-American</labl>
+      </catgry>
+      <catgry>
+        <catValu>300</catValu>
+        <labl>Aleut, Alaskan Native, or American Indian</labl>
+      </catgry>
+      <catgry>
+        <catValu>310</catValu>
+        <labl>Alaskan Native or American Indian</labl>
+      </catgry>
+      <catgry>
+        <catValu>320</catValu>
+        <labl>Alaskan Native/Eskimo</labl>
+      </catgry>
+      <catgry>
+        <catValu>330</catValu>
+        <labl>Aleut</labl>
+      </catgry>
+      <catgry>
+        <catValu>340</catValu>
+        <labl>American Indian</labl>
+      </catgry>
+      <catgry>
+        <catValu>400</catValu>
+        <labl>Asian or Pacific Islander</labl>
+      </catgry>
+      <catgry>
+        <catValu>410</catValu>
+        <labl>Asian</labl>
+      </catgry>
+      <catgry>
+        <catValu>411</catValu>
+        <labl>Chinese</labl>
+      </catgry>
+      <catgry>
+        <catValu>412</catValu>
+        <labl>Filipino</labl>
+      </catgry>
+      <catgry>
+        <catValu>413</catValu>
+        <labl>Korean</labl>
+      </catgry>
+      <catgry>
+        <catValu>414</catValu>
+        <labl>Vietnamese</labl>
+      </catgry>
+      <catgry>
+        <catValu>415</catValu>
+        <labl>Japanese</labl>
+      </catgry>
+      <catgry>
+        <catValu>416</catValu>
+        <labl>Asian Indian</labl>
+      </catgry>
+      <catgry>
+        <catValu>420</catValu>
+        <labl>Pacific Islander</labl>
+      </catgry>
+      <catgry>
+        <catValu>421</catValu>
+        <labl>Hawaiian</labl>
+      </catgry>
+      <catgry>
+        <catValu>422</catValu>
+        <labl>Samoan</labl>
+      </catgry>
+      <catgry>
+        <catValu>423</catValu>
+        <labl>Guamanian</labl>
+      </catgry>
+      <catgry>
+        <catValu>430</catValu>
+        <labl>Other Asian or Pacific Islander</labl>
+      </catgry>
+      <catgry>
+        <catValu>431</catValu>
+        <labl>Other Asian or Pacific Islander (1992-1995)</labl>
+      </catgry>
+      <catgry>
+        <catValu>432</catValu>
+        <labl>Other Asian or Pacific Islander (1996)</labl>
+      </catgry>
+      <catgry>
+        <catValu>433</catValu>
+        <labl>Other Asian or Pacific Islander (1997-1998)</labl>
+      </catgry>
+      <catgry>
+        <catValu>434</catValu>
+        <labl>Other Asian (1999 forward)</labl>
+      </catgry>
+      <catgry>
+        <catValu>500</catValu>
+        <labl>Other Race</labl>
+      </catgry>
+      <catgry>
+        <catValu>510</catValu>
+        <labl>Other Race (1963-1977)</labl>
+      </catgry>
+      <catgry>
+        <catValu>520</catValu>
+        <labl>Other Race (1978)</labl>
+      </catgry>
+      <catgry>
+        <catValu>530</catValu>
+        <labl>Other Race (1979-1991)</labl>
+      </catgry>
+      <catgry>
+        <catValu>540</catValu>
+        <labl>Other Race (1992-1995)</labl>
+      </catgry>
+      <catgry>
+        <catValu>550</catValu>
+        <labl>Other Race (1996)</labl>
+      </catgry>
+      <catgry>
+        <catValu>560</catValu>
+        <labl>Other Race (1997-1998)</labl>
+      </catgry>
+      <catgry>
+        <catValu>570</catValu>
+        <labl>Other Race (1999-2002)</labl>
+      </catgry>
+      <catgry>
+        <catValu>580</catValu>
+        <labl>Primary Race not releasable</labl>
+      </catgry>
+      <catgry>
+        <catValu>600</catValu>
+        <labl>Multiple Race, No Primary Race Selected</labl>
+      </catgry>
+      <catgry>
+        <catValu>610</catValu>
+        <labl>Multiple Race, including Asian, excluding Black and White</labl>
+      </catgry>
+      <catgry>
+        <catValu>611</catValu>
+        <labl>Multiple Race, including Asian and Black, excluding White</labl>
+      </catgry>
+      <catgry>
+        <catValu>612</catValu>
+        <labl>Multiple Race, including Asian and White, excluding Black</labl>
+      </catgry>
+      <catgry>
+        <catValu>613</catValu>
+        <labl>Multiple Race, including Black, excluding Asian and White</labl>
+      </catgry>
+      <catgry>
+        <catValu>614</catValu>
+        <labl>Multiple Race, including Black and White, excluding Asian</labl>
+      </catgry>
+      <catgry>
+        <catValu>615</catValu>
+        <labl>Multiple Race, including White, excluding Asian and Black</labl>
+      </catgry>
+      <catgry>
+        <catValu>616</catValu>
+        <labl>Multiple Race, including Asian, White, and Black</labl>
+      </catgry>
+      <catgry>
+        <catValu>617</catValu>
+        <labl>Multiple Race, excluding Asian, White, and Black</labl>
+      </catgry>
+      <catgry>
+        <catValu>900</catValu>
+        <labl>Unknown</labl>
+      </catgry>
+      <catgry>
+        <catValu>970</catValu>
+        <labl>Unknown-refused</labl>
+      </catgry>
+      <catgry>
+        <catValu>980</catValu>
+        <labl>Unknown-not ascertained</labl>
+      </catgry>
+      <catgry>
+        <catValu>990</catValu>
+        <labl>Unknown (1997 forward: Don't know)</labl>
+      </catgry>
+      <concept vocab="IPUMS">Ethnicity/Nativity Variables -- ANNUAL</concept>
+      <varFormat schema="other" type="numeric"/>
+    </var>
+    <var ID="FTOTINCMEPS" files="ExtractData" name="FTOTINCMEPS" intrvl="contin" dcml="2">
+      <location StartPos="35" width="9" EndPos="43"/>
+      <labl>Constructed total MEPS family income</labl>
+      <txt><![CDATA[Available in all survey years, FTOTINCMEPS is an IPUMS MEPS constructed variable that sums total personal income (INCTOT) (excluding tax refunds and capital gains) across the MEPS family to report the total income for each person's MEPS family.
+
+MEPS families are defined as a group of two or more people related by birth, marriage, adoption, fostering, or cohabitation, and residing together. Unlike the CPS defined family, MEPS family does include unmarried partners and foster children.
+
+FTOTINCMEPS was derived by constructing person-level total income comprising annual earnings from wages, salaries, bonuses, tips, commissions; business and farm games and losses; unemployment and workers' compensation; interest and dividends; alimony, child support, and other private cash transfers; private pensions, IRA withdrawals, social security, and veterans payments; supplemental security income and cash welfare payments from public assistance, Temporary Assistance for Needy Families, and related programs; gains or losses from estates, trusts, partnerships, S corporations, rent, and royalties; and a small amount of "other" income. Person-level income excluded tax refunds and capital gains. FTOTINCMEPS was constructed from the public (edited and top-coded) versions of total individual income 
+
+Person-level income totals were then summed over MEPS family members, as defined by FAMIDYR, to yield MEPS family-level total income.
+
+Beginning in 2007, the variable FTOTVAL was constructed from the person-level total income variable (INCTOT). Additionally, the variable FTOTINCCPS is IPUMS MEPS constructed, and offers total family income for CPS families (excludes foster children and unmarried partners). Like FTOTINCMEPS, FTOTINCCPS is constructed from the public (edited and top-coded) versions of total individual income)]]></txt>
+      <codInstr><![CDATA[
+FTOTINCMEPS is 9 columns wide with 2 implied decimals.]]></codInstr>
+      <concept vocab="IPUMS">Total Income and Earnings Variables -- ANNUAL</concept>
+      <varFormat schema="other" type="numeric"/>
+    </var>
+    <var ID="USUALPL" files="ExtractData" name="USUALPL" intrvl="discrete" dcml="0">
+      <location StartPos="44" width="1" EndPos="44"/>
+      <labl>Has usual place for medical care</labl>
+      <txt><![CDATA[For all persons eligible for the Access to Care supplement (AC) (ACCESSELIG), USUALPL indicates whether they have a particular doctor's office, clinic, health center, or other place they usually go if they are sick or need advice about their health.
+
+Notes about the Universe
+
+In the course of investigating this variable for integration, IPUMS MEPS staff discovered some non-adherent cases in 1999-2001. In 1999, three individuals are marked as eligible for the Access to Care Supplement, but are not in universe for USUALPL. In 2000, there are nine people who meet those same criteria and in 2001 there are six people. From 2002 forward, all people who are eligible for the AC are also in universe for USUALPL.
+
+
+The Access to Care Supplement
+This variable is part of the Access to Care supplement, a section of the MEPS HC survey fielded to participants in Rounds 2 and 4 of data collection to gain information on barriers family members have faced in obtaining needed health care, the usual source of care for all family members, and characteristics of usual source of care health providers. MEPS administers the AC to all current RU members in Rounds 2 and 4, excluding those who are deceased or institutionalized (ACCESSELIG). This section was redesigned in 2002 (Panel 6 Round 4 and Panel 7 Round 2) to focus more on possible language barriers and other problems faced in obtaining necessary health, dental, or prescription medicine care.
+
+Other AC Variables
+
+The AC includes variables pertaining to the following topics:
+
+ACCESSELIG: Persons eligible for Access to Care supplement
+
+Reasons for not having a usual source of care provider:
+
+NOUSLYDKWHER: Why no usual source of care: Doesn't know where to go,
+NOUSLYDRMOV: Why no usual source of care: Previous doctor moved or is unavailable,
+NOUSLYFAR: Why no usual source of care: Care too far away or inconvenient,
+NOUSLYLANG: Why no usual source of care: Speak a different language,
+NOUSLYNOLIKE: Why no usual source of care: Doesn't like doctors,
+NOUSLYNONEED: Why no usual source of care: Doesn't need doctor, and
+NOUSLYOTH: Why no usual source of care: Other reason
+
+Characteristics of usual source of care provider:
+
+TYPPLSICK: Kind of usual place for medical care,
+USCMEDTYP: Usual source of care medical setting type,
+USCPRTYP: Type of provider seen at usual source of care,
+USCUPR: Sees particular provider at usual source of care,
+USCPRFAC: Whether provider is facility, provider, or provider in facility,
+USCPRASN: Usual medical provider is Asian,
+USCPRBLK: Usual medical provider is black or African American,
+USCPRHISP: Usual medical provider is Hispanic or Latino,
+USCPRNATAM: Usual medical provider is Native American,
+USCPROPI: Usual medical provider is Other Pacific Islander,
+USCPROTHRAC: Usual medical provider is some other race,
+USCPRWHT: Usual medical provider is white, and
+USCPRSEX: Usual medical provider is male or female
+
+Reasons for visiting usual source of care provider:
+
+USCPRNEW: Would go to usual medical provider for: New health problems,
+USCPRONGNG: Would go to usual medical provider for: Ongoing health problems,
+USCPRPREV: Would go to usual medical provider for: Preventive health care, and
+USCPRREFRL: Would go to usual medical provider for: Preventive health care
+
+Characteristics of usual source of care provider's accessibility:
+
+TYPUSCTRANS: How does person get to usual source of care provider,
+USCTRVLTIM: Travel time to usual source of care,
+USCHOWDFCLT: How difficult to get to usual source of care,
+USCPRDIFAPPT: Difficulty making an appointment with usual medical provider on short notice,
+USCPRDIFTEL: Difficulty reaching usual medical provider by phone during business hours,
+USCPRAFTHRS: Difficulty reaching usual medical provider after hours for urgent medical needs,
+USCPRNGTWKD: Usual medical provider has night or weekend availability,
+USCPRLANG: Usual medical provider speaks preferred language or provides translator services,
+USCPRWAIT: Wait time before seeing usual medical provider for an appointment, and
+USCPRAPPTWLK: Make an appointment or walk-in to see usual medical provider
+
+Quality of interactions with usual source of care provider:
+
+USCPRSATQLT: Satisfaction with quality of care from usual medical provider,
+USCPRSATSTAF: Satisfaction with staff at usual medical provider,
+USCPRCNFDT: Confident in usual medical provider's ability to help with medical problems,
+USCPRCHOICE: Usual medical provider asks person to help decide between choice of treatments,
+USCPRCTRL: Usual medical provider gives person some control over their treatment,
+USCPREXPLN: Usual medical provider presents and explains all options,
+USCPRLSTN: Usual medical provider listens and provides needed health information,
+USCPROTHCARE: Usual medical provider asks about prescriptions or treatments from other providers,
+USCPRRSPCT: Usual medical provider shows respect for treatments person is happy with,
+USCCHNG: Anyone in family changed usual source of care in past year,
+USCCHNGY: Reason for change in family member's usual source of care in past year,
+USUALPLFM: Anyone in the family had a usual source of care in past year, and
+USUALPLFMY: Reason family member no longer has a usual source of care
+
+Reasons individual has no usual source of care provider:
+
+WHYNOUSLPL: Main reason has no particular place for sick care,
+NOUSLYER: Why no usual source of care: Uses hospital/ER/clinic,
+NOUSLYDIFF: Why no usual source of care: Different places for different needs,
+NOUSLYDR: Why no usual source of care: Looking for new doctor,
+NOUSLYEXP: Why no usual source of care: Medical care too expensive,
+NOUSLYFRFAM: Why no usual source of care: Doctor is self, friend, or family member,
+NOUSLYHLTH: Why no usual source of care: Reason related to health,
+NOUSLYINCHG: Why no usual source of care: Insurance charge,
+NOUSLYINRSN: Why no usual source of care: Reason related to insurance,
+NOUSLYJOB: Why no usual source of care: Reason related to job,
+NOUSLYMOVE: Why no usual source of care: Recently moved to area,
+NOUSLYNOINS: Why no usual source of care: No health insurance,
+NOUSLYNONE: Why no usual source of care: No other reason,
+NOUSLYSELF: Why no usual source of care: Self treat,
+NOUSLYTRANS: Why no usual source of care: Reasons related to time and transportation, and
+NOUSLYWORK: Why no usual source of care: Receive care at work
+
+Reasons individual's usual source of care provider is a hospital:
+
+WHYUSCHOSP: Main reason usual source of care is hospital,
+USHOSYBEST: Other reason hospital is usual source of care: Best care for health condition,
+USHOSYCONV: Other reason hospital is usual source of care: Convenience,
+USHOSYCOST: Other reason hospital is usual source of care: Can't afford to go elsewhere,
+USHOSYDROFF: Other reason hospital is usual source of care: Doctor has outpatient office,
+USHOSYINS: Other reason hospital is usual source of care: Reason related to insurance,
+USHOSYNONE: Other reason hospital is usual source of care: No other reason,
+USHOSYPREF: Other reason hospital is usual source of care: Preferes/Likes this source,
+USHOSYTIME: Other reason hospital is usual source of care: Only care available when have time to go,
+USHOSYDK: Other reason hospital is usual source of care: Don't know where else to go, and
+USHOSYOTH: Other reason hospital is usual source of care: Other reason
+
+Situations in which an individual delayed needed medical care:
+
+DELAYMC: Had to delay getting medical care,
+DELAYMCPB: How big of a problem was it to have to delay needed medical care,
+DELAYDT: Had to delay getting needed dental care,
+DELAYDTY: Reason had to delay getting needed dental care,
+DELAYDTPB: How big of a problem was it to have to delay needed dental care,
+DELAYRX: Had to delay getting needed prescription medication, and
+DELAYRXY: Reason had to delay getting needed prescription medication
+
+Situations in which an individual was unable to get needed medical care:
+
+UNMTNDMC: Unable to get needed medical care,
+UNMTNDMCPB: How big of a problem was it to have to forgo needed medical care,
+UNMTNDMCY: Reason unable to get needed medical care,
+UNMTNDDT: Unable to get needed dental care,
+UNMTNDDTPB: How big of a problem was it to have to forgo needed dental care,
+UNMTNDDTY: Reason unable to get needed dental care,
+UNMTNDRX: Unable to get needed prescription medication,
+UNMTNDRXY: Reason unable to get needed prescription medication,
+UNMTNDRXPB: How big of a problem was it to have to forgo needed prescription medication, and
+FAMYBARCAR: Any family member need and not get medical care (due to cost), past 12 months
+
+Reasons family members had difficulty obtaining needed medical care:
+
+MCSATFM: Overall satisfaction that family members can get needed medical care,
+DIFCARFM: Any family member have difficulty obtaining needed medical care,
+DIFCARFMY: Main reason family member had difficulty obtaining needed medical care,
+DIFCARFMYNO: Other reason family member had difficulty obtaining medical care: No other reason,
+DIFCARFMYCST: Other reason family member had difficulty obtaining medical care: Couldn't afford care,
+DIFCARFMYINS: Other reason family member had difficulty obtaining medical care: Insurance company won't pay,
+DIFCARFMYPRE: Other reason family member had difficulty obtaining medical care: Pre-existing condition,
+DIFCARFMYRFL: Other reason family member had difficulty obtaining medical care: Insurance required referral,
+DIFCARFMYDRR: Other reason family member had difficulty obtaining medical care: Doctor refused insurance,
+DIFCARFMYDIS: Other reason family member had difficulty obtaining medical care: Distance,
+DIFCARFMYTRA: Other reason family member had difficulty obtaining medical care: No transportation,
+DIFCARFMYTCT: Other reason family member had difficulty obtaining medical care: Transportation cost,
+DIFCARFMYHR: Other reason family member had difficulty obtaining medical care: Hearing impairment,
+DIFCARFMYLAN: Other reason family member had difficulty obtaining medical care: Language barrier,
+DIFCARFMYINT: Other reason family member had difficulty obtaining medical care: Hard to get into building,
+DIFCARFMYIND: Other reason family member had difficulty obtaining medical care: Hard to get around inside building,
+DIFCARFMYEQP: Other reason family member had difficulty obtaining medical care: No appropriate equipment in office,
+DIFCARFMYWRK: Other reason family member had difficulty obtaining medical care: Couldn't get time off work,
+DIFCARFMYREF: Other reason family member had difficulty obtaining medical care: Was refused services,
+DIFCARFMYCLD: Other reason family member had difficulty obtaining medical care: Couldn't get child care,
+DIFCARFMYTIM: Other reason family member had difficulty obtaining medical care: Didn't have time or took too long, and
+DIFCARFMYOTH: Other reason family member had difficulty obtaining medical care: Other reason
+]]></txt>
+      <catgry>
+        <catValu>0</catValu>
+        <labl>NIU</labl>
+      </catgry>
+      <catgry>
+        <catValu>1</catValu>
+        <labl>There is no place or No</labl>
+      </catgry>
+      <catgry>
+        <catValu>2</catValu>
+        <labl>Yes, has a usual place or Yes</labl>
+      </catgry>
+      <catgry>
+        <catValu>3</catValu>
+        <labl>There is more than one place</labl>
+      </catgry>
+      <catgry>
+        <catValu>7</catValu>
+        <labl>Unknown-refused</labl>
+      </catgry>
+      <catgry>
+        <catValu>8</catValu>
+        <labl>Unknown-not ascertained</labl>
+      </catgry>
+      <catgry>
+        <catValu>9</catValu>
+        <labl>Unknown-don't know</labl>
+      </catgry>
+      <concept vocab="IPUMS">Access to Care Variables -- ANNUAL</concept>
+      <varFormat schema="other" type="numeric"/>
+    </var>
+    <var ID="USCTRVLTIM" files="ExtractData" name="USCTRVLTIM" intrvl="discrete" dcml="0">
+      <location StartPos="45" width="1" EndPos="45"/>
+      <labl>Travel time to usual source of care</labl>
+      <txt><![CDATA[For current RU members in rounds 2 and 4 with a usual source of care (USUALPL), USCTRVLTIM reports the amount of time it usually takes individuals to travel to their usual source of care. USCTRVLTIM is collected as part of the Access to Care supplement, which gathers information on usual source of care for all family members, characteristics of usual source of care health providers, and barriers family members have faced in obtaining needed health care.]]></txt>
+      <catgry>
+        <catValu>0</catValu>
+        <labl>Not in universe</labl>
+      </catgry>
+      <catgry>
+        <catValu>1</catValu>
+        <labl>Less than 15 minutes</labl>
+      </catgry>
+      <catgry>
+        <catValu>2</catValu>
+        <labl>15 to 30 minutes</labl>
+      </catgry>
+      <catgry>
+        <catValu>3</catValu>
+        <labl>31 to 60 minutes (1 hour)</labl>
+      </catgry>
+      <catgry>
+        <catValu>4</catValu>
+        <labl>61 to 90 minutes</labl>
+      </catgry>
+      <catgry>
+        <catValu>5</catValu>
+        <labl>91 to 120 minutes (2 hours)</labl>
+      </catgry>
+      <catgry>
+        <catValu>6</catValu>
+        <labl>More than 120 minutes (2 hours)</labl>
+      </catgry>
+      <catgry>
+        <catValu>7</catValu>
+        <labl>Unknown - refused</labl>
+      </catgry>
+      <catgry>
+        <catValu>8</catValu>
+        <labl>Unknown - not ascertained</labl>
+      </catgry>
+      <catgry>
+        <catValu>9</catValu>
+        <labl>Unknown - don't know</labl>
+      </catgry>
+      <concept vocab="IPUMS">Access to Care Variables -- ANNUAL</concept>
+      <varFormat schema="other" type="numeric"/>
+    </var>
+    <var ID="COVERTYPE" files="ExtractData" name="COVERTYPE" intrvl="discrete" dcml="0">
+      <location StartPos="46" width="1" EndPos="46"/>
+      <labl>Health insurance coverage type (hierarchy)</labl>
+      <txt><![CDATA[For all persons, COVERTYPE reports the persons' health insurance coverage type recoded into a hierarchy. COVERTYPE includes three mutually exclusive categories and persons with more than one type of health insurance coverage were assigned to the first appropriate category in the following hierarchy:
+
+Private, including persons who had any private insurance coverage during the calendar year, including TRICARE/CHAMPVA.
+Public only, including persons who only had public coverage during the calendar year.
+Uninsured, including persons who were uninsured for the entire calendar year.]]></txt>
+      <catgry>
+        <catValu>0</catValu>
+        <labl>NIU</labl>
+      </catgry>
+      <catgry>
+        <catValu>1</catValu>
+        <labl>Private</labl>
+      </catgry>
+      <catgry>
+        <catValu>2</catValu>
+        <labl>Medicaid and other public</labl>
+      </catgry>
+      <catgry>
+        <catValu>3</catValu>
+        <labl>Other coverage</labl>
+      </catgry>
+      <catgry>
+        <catValu>4</catValu>
+        <labl>Uninsured</labl>
+      </catgry>
+      <catgry>
+        <catValu>5</catValu>
+        <labl>Don't know</labl>
+      </catgry>
+      <concept vocab="IPUMS">General Coverage Variables -- ANNUAL</concept>
+      <varFormat schema="other" type="numeric"/>
+    </var>
+  </dataDscr>
+</codeBook>

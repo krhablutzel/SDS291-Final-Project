@@ -1,0 +1,19 @@
+---
+title: "Final-Testing"
+author: "Kathleen Hablutzel"
+date: "11/18/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(ipumsr)
+```
+
+```{r}
+ddi <- read_ipums_ddi("meps_00001.xml")
+data <- read_ipums_micro(ddi)
+```
+
+Age, race
