@@ -192,3 +192,11 @@ ggplot(data, aes(Insurance, fill=HasUsualPlace)) +
 ```
 
 For our secondary explanatory variable, insurance coverage, we created a stacked bar chart among our three categories of insurance coverage: private, public, and uninsured. We noticed a large difference in the proportion of uninsured individuals who have a usual place for medical care (only 39%) versus private or public insurance (79% and 83%, respectively). We definitely expect there to be a statistically significant difference in whether a participant has a usual place for medical care between uninsured participants and the other two groups. Based on the large sample size, we might also expect a significant difference between private and public insurance, as well.
+
+# References
+
+[MEPS User Guide](https://meps.ipums.org/meps/userGuide.shtml)
+
+[MEPS Website](https://meps.ahrq.gov/mepsweb/)
+
+[US Population Count](https://www.census.gov/popclock/)
