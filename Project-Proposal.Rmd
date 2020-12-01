@@ -21,7 +21,7 @@ library(ggthemes)
 
 # Purpose
 
-We know that many Americans struggle with access to healthcare. Some are so disconnected from the healthcare system that they do not have a usual place for medical care. We want to study factors that may affect whether someone has a usual place for medical care, such as family income and type of insurance coverage. Thus, our primary hypothesis is that there is a statistically significant difference in whether someone has a usual place for medical care based on family income, when controlling for age, race, and insurance coverage type. We also have a secondary hypothesis that there is a statistically significant difference in whether someone has a usual place for medical care based on insurance coverage type, when controlling for age, race, and family income.
+We know that many Americans struggle with access to healthcare. Some are so disconnected from the healthcare system that they do not have a usual place for medical care. We want to study factors that may affect whether someone has a usual place for medical care, such as family income and type of insurance coverage. We also plan to control for age and race, because there may be some association of all our variables with these demographics. Thus, our primary hypothesis is that there is a statistically significant difference in whether someone has a usual place for medical care based on family income, when controlling for age, race, and insurance coverage type. We also have a secondary hypothesis that there is a statistically significant difference in whether someone has a usual place for medical care based on insurance coverage type, when controlling for age, race, and family income.
 
 # Data
 
