@@ -171,8 +171,45 @@ Interaction term does NOT add significant information to the model (p-value = 1)
 
 ## Confidence Intervals
 
+```{r}
+# for income
+beta7 <- 1.495e-06
+SE <- 3.239e-07
+zStar <- 1.96
+
+lower <- beta7 - SE * zStar
+upper <- beta7 + SE * zStar
+
+exp(beta7*10000)
+exp(lower*10000)
+exp(upper*10000)
+```
 
 
+```{r}
+# for private vs. uninsured
+beta9 <- -1.212
+SE <- 8.478e-02
+zStar <- 1.96
+
+lower9 <- beta9 - SE * zStar
+upper9 <- beta9 + SE * zStar
+
+exp(beta9)
+exp(lower9)
+exp(upper9)
+```
+
+
+# Words, I guess
+
+How much missing data did you have and what did you do about it?
+
+How did you choose which variables to include in your model?
+What kind of model did you fit?
+How did you evaluate the assumptions of this model? Don’t tell us the results, just tell us the steps you took. Think of this as like in a lab report that is reproducible – someone else should be able to download the same data, follow your steps, and get the same results.
+
+# Regression Conditions
 
 ## Empirical Logit Plot
 
@@ -203,6 +240,12 @@ data %>%
   adorn_totals(where = c("row","col"))
 ```
 
+# Questions
+
+- allowed to remove age sub-18?
+- how to compare public vs. uninsured
+- assessing multicollinearity with one categorical, one quantitative
+- empirical logit plot for categorical explanatory variable
 
 # Notes:
 
@@ -213,6 +256,8 @@ data %>%
   tabyl(Race, Insurance) %>% 
   adorn_totals(where = c("row","col"))
 ```
+
+
 
 
 # Old Code
