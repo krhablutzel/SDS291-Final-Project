@@ -1,0 +1,313 @@
+---
+title: "Final Project"
+author: "Ivy, Juliet, Kathleen"
+date: "12/5/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE
+)
+library(tidyverse)
+library(Stat2Data)
+library(ipumsr)
+library(janitor)
+library(ggthemes)
+```
+
+## Data Cleaning
+
+```{r}
+# read in data
+ddi <- read_ipums_ddi("meps_00004.xml")
+initialData <- read_ipums_micro(ddi)
+```
+
+```{r}
+# rename data for ease of use
+# simplified multiple race version
+data <- initialData %>%
+  rename(Age = AGE,
+         Race = RACEA,
+         Income = FTOTINCMEPS,
+         HasUsualPlace = USCMEDTYP,
+         Insurance = COVERTYPE) %>%
+  select(DUID, MEPSID, HasUsualPlace, Age, Race, Income, Insurance) %>%
+  filter(HasUsualPlace != 9, # remove before recoding, so doesn't leave empty level
+         Age >= 18) # adults only
+
+data$Race <- data$Race %>%
+  as.factor() %>%
+  recode(`100` = "White",
+         `200` = "Black/African-American",
+         `310` = "Alaskan Native or American Indian",
+         `410` = "Asian",
+         `420` = "Pacific Islander",
+         `610` = "Multiple Race",
+         `611` = "Multiple Race",
+         `612` = "Multiple Race",
+         `613` = "Multiple Race",
+         `614` = "Multiple Race",
+         `615` = "Multiple Race",
+         `616` = "Multiple Race",
+         `617` = "Multiple Race"
+         )
+
+data$HasUsualPlace <- data$HasUsualPlace %>%
+  as.factor() %>%
+  recode(`0` = "No",
+         `1` = "Yes", # only counting doctor's office
+         `2` = "No", # not emergency rooms
+         `3` = "No",
+         `9` = "N/A"
+         )
+
+data$Insurance <- data$Insurance %>%
+  as.factor() %>%
+  recode(`1` = "Private",
+         `2` = "Public",
+         `4` = "Uninsured"
+         )
+```
+
+```{r, eval=FALSE, include=FALSE}
+# count households - 12096 -> 12087 w/o child households -> 11746 w/o "don't know" either
+num <- data %>%
+  group_by(DUID) %>%
+  summarize(n = n()) %>%
+  nrow()
+```
+
+## Random Sample of People in Households
+
+```{r}
+set.seed(517)
+
+upData <- data %>%
+  group_by(DUID) %>% # one person per dwelling unit
+  sample_n(1)
+```
+
+```{r, eval=FALSE, include=FALSE}
+# after sample, check for no repeat dwelling units
+noRepeats <- upData %>% # false for repeats, true if no repeats
+  pull(DUID) %>%
+  unique() %>%
+  length() == num # from household count above
+
+```
+
+12,096 households
+
+12,087 w/o children
+
+11,746 excluding "don't know" people
+
+```{r}
+# how many multiple race? 443 -> 342
+multi_race <- upData %>%
+  filter(Race == "Multiple Race") %>%
+  nrow()
+  #filter(Race %in% c("Multiple Race, including Asian, excluding Black and White", "Multiple Race, including Asian and Black, excluding White", "Multiple Race, including Asian and White, excluding Black", "Multiple Race, including Black, excluding Asian and White", "Multiple Race, including Black and White, excluding Asian", "Multiple Race, including White, excluding Asian and Black", "Multiple Race, including Asian, White, and Black", "Multiple Race, excluding Asian, White, and Black"))
+```
+
+## Full Model
+
+```{r}
+# full model
+fullModel <- glm(HasUsualPlace~Age+Race+Income+Insurance, family="binomial", data = upData)
+
+summary(fullModel)
+```
+
+Age, Black (vs. White), Asian (vs. White), Alaskan Native or Native American (vs. White) (though note small sample size, and only 2*), Income, and Uninsured (vs. Private) all *** significant
+
+Public Insurance (vs. Private), RacePacific Islander, and RaceMultiple Race insignificant (note small sample sizes/weird category combo)
+
+Primary variable - Income significant w/ age, race, insurance coverage constant
+
+Secondary variable - uninsured vs. private significant; public vs. private not significant, w/ age, race, income constant
+
+```{r}
+# nested G-test for Insurance significant in general
+
+# reduced model no insurance
+noInsuranceModel <- glm(HasUsualPlace~Age+Race+Income, family="binomial", data = upData)
+
+summary(noInsuranceModel)
+```
+
+```{r}
+G_stat <- 15793 - 15550
+
+pchisq(G_stat, df=2, lower.tail = FALSE)
+```
+
+p-value *** significant for Insurance type being significant when accounting for age, race, income
+
+## Relationship between income and insurance?
+
+```{r}
+# interaction term
+interactionModel <- glm(HasUsualPlace~Age+Race+Income+Insurance+Income*Insurance, family="binomial", data = upData)
+
+summary(interactionModel)
+```
+
+Income:Public insurance and Income:uninsured coefficients not significantly different from Income:Private slope
+
+```{r}
+# reduced no interaction term = full model
+
+# nested G-test for interaction term significant:
+
+G_stat <- 15550 - 15550
+
+pchisq(G_stat, df=2, lower.tail = FALSE)
+```
+
+Interaction term does NOT add significant information to the model (p-value = 1)
+
+## Confidence Intervals
+
+
+
+
+## Empirical Logit Plot
+
+seems linear
+
+```{r}
+emplogitplot1(HasUsualPlace~Age, ngroups = 40, data = upData)
+```
+
+```{r}
+emplogitplot1(HasUsualPlace~Income, ngroups = 40, data = upData)
+```
+
+
+# Multicollinearity
+
+```{r}
+data %>%
+  tabyl(Insurance, HasUsualPlace) %>% 
+  adorn_totals(where = c("row","col"))
+
+data %>%
+  tabyl(Race, HasUsualPlace) %>% 
+  adorn_totals(where = c("row","col"))
+
+data %>%
+  tabyl(Race, Insurance) %>% 
+  adorn_totals(where = c("row","col"))
+```
+
+
+# Notes:
+
+Pacific Islander, and Alaskan Native or American Indian, may be too small sample sizes
+
+```{r}
+data %>%
+  tabyl(Race, Insurance) %>% 
+  adorn_totals(where = c("row","col"))
+```
+
+
+# Old Code
+
+```{r}
+# rename data for ease of use
+data <- initialData %>%
+  rename(Age = AGE,
+         Race = RACEA,
+         Income = FTOTINCMEPS,
+         HasUsualPlace = USUALPL,
+         Insurance = COVERTYPE)
+
+data$Race <- data$Race %>%
+  as.factor() %>%
+  recode(`100` = "White",
+         `200` = "Black/African-American",
+         `310` = "Alaskan Native or American Indian",
+         `410` = "Asian",
+         `420` = "Pacific Islander",
+         `610` = "Multiple Race, including Asian, excluding Black and White",
+         `611` = "Multiple Race, including Asian and Black, excluding White",
+         `612` = "Multiple Race, including Asian and White, excluding Black",
+         `613` = "Multiple Race, including Black, excluding Asian and White",
+         `614` = "Multiple Race, including Black and White, excluding Asian",
+         `615` = "Multiple Race, including White, excluding Asian and Black",
+         `616` = "Multiple Race, including Asian, White, and Black",
+         `617` = "Multiple Race, excluding Asian, White, and Black"
+         )
+
+data$HasUsualPlace <- data$HasUsualPlace %>%
+  as.factor() %>%
+  recode(`0` = "N/A",
+         `1` = "No",
+         `2` = "Yes",
+         `7` = "N/A",
+         `9` = "N/A"
+         )
+
+data$Insurance <- data$Insurance %>%
+  as.factor() %>%
+  recode(`1` = "Private",
+         `2` = "Public",
+         `4` = "Uninsured"
+         )
+```
+
+
+```{r}
+# info table
+initialData %>%
+  tabyl(USCMEDTYP) %>% 
+  adorn_totals(where = c("row","col")) %>%
+  adorn_pct_formatting(digits = 0)
+```
+
+```{r}
+# for comparing USCMEDTYP, USUALPL, and TYPPLSICK
+test <- initialData %>%
+  filter(USCMEDTYP != 9) %>%
+  select(DUID, MEPSID, USCMEDTYP, USUALPL, TYPPLSICK)
+
+# USCMEDTYP == 1 vs 0, 2, 3, and remove 9 (don't know)
+
+test %>%
+  pull(USCMEDTYP) %>%
+  unique()
+```
+
+
+```{r}
+# households of only children
+children <- data %>%
+  group_by(DUID) %>%
+  summarize(n = n(), maxAge = max(Age)) %>%
+  arrange(maxAge) %>%
+  filter(maxAge < 18) %>%
+  left_join(data, by = "DUID")
+```
+
+## two vars together significant?
+
+```{r}
+# nested G-test for 2 vars add to model
+
+# reduced model no insurance or income
+noInsuranceIncomeModel <- glm(HasUsualPlace~Age+Race, family="binomial", data = upData)
+
+summary(noInsuranceIncomeModel)
+```
+
+```{r}
+G_stat <- 15847 - 15550
+
+pchisq(G_stat, df=3, lower.tail = FALSE)
+```
+
+p-value *** significant for Insurance and Income adding to model beyond Age and Race
