@@ -35,7 +35,8 @@ data <- initialData %>%
          Insurance = COVERTYPE) %>%
   select(DUID, MEPSID, HasUsualPlace, Age, Race, Income, Insurance) %>%
   filter(HasUsualPlace != 9, # remove before recoding, so doesn't leave empty level
-         Age >= 18) # adults only
+         Age >= 18, # adults only
+         Age < 85) # remove missing (99), and the big cluster of 85+ (85)
 
 data$Race <- data$Race %>%
   as.factor() %>%
@@ -146,6 +147,22 @@ pchisq(G_stat, df=2, lower.tail = FALSE)
 
 p-value *** significant for Insurance type being significant when accounting for age, race, income
 
+# compare public and uninsured
+
+```{r}
+# reorder levels to compare public ot uninsured
+upData$Insurance <- upData$Insurance %>%
+  factor(levels = c("Public", "Private", "Uninsured"))
+```
+
+```{r}
+# full model w/ public first
+fullModelPublic <- glm(HasUsualPlace~Age+Race+Income+Insurance, family="binomial", data = upData)
+
+summary(fullModelPublic)
+```
+
+
 ## Relationship between income and insurance?
 
 ```{r}
@@ -162,7 +179,7 @@ Income:Public insurance and Income:uninsured coefficients not significantly diff
 
 # nested G-test for interaction term significant:
 
-G_stat <- 15550 - 15550
+G_stat <- 14893 - 14893
 
 pchisq(G_stat, df=2, lower.tail = FALSE)
 ```
@@ -200,6 +217,21 @@ exp(lower9)
 exp(upper9)
 ```
 
+```{r}
+# for public vs. uninsured
+beta9 <- -1.162
+SE <- 8.859e-02
+zStar <- 1.96
+
+lower9 <- beta9 - SE * zStar
+upper9 <- beta9 + SE * zStar
+
+exp(beta9)
+exp(lower9)
+exp(upper9)
+```
+
+---------------------------------
 
 # Words, I guess
 
@@ -208,6 +240,10 @@ How much missing data did you have and what did you do about it?
 How did you choose which variables to include in your model?
 What kind of model did you fit?
 How did you evaluate the assumptions of this model? Don’t tell us the results, just tell us the steps you took. Think of this as like in a lab report that is reproducible – someone else should be able to download the same data, follow your steps, and get the same results.
+
+
+We fit a logistic regression model predicting HasUsualPlace from Income and Insurance when accounting for Age and Race. Our empirical logit plots with 40 bins (?) appeared linear for both HasUsualPlace vs. Income and HasUsualPlace vs. Age, so we were confident in the linearity of our data. We selected one participant per household to ensure independence, and participants were selected _____ to ensure randomness. (check survey description page 8 https://www.cdc.gov/nchs/nhis/1997-2018.htm) Additionally, we formed 2x2 contingency tables of HasUsualPlace vs. Insurance, HasUsualPlace vs. Race, and Race vs. Insurance to ensure sufficient sample sizes within each category. Our predictions may be least accurate among Alaskan Native or American Indian people, Pacific Islanders, and people of multiple races due to small sample sizes.
+
 
 # Regression Conditions
 
@@ -227,15 +263,15 @@ emplogitplot1(HasUsualPlace~Income, ngroups = 40, data = upData)
 # Multicollinearity
 
 ```{r}
-data %>%
+upData %>%
   tabyl(Insurance, HasUsualPlace) %>% 
   adorn_totals(where = c("row","col"))
 
-data %>%
+upData %>%
   tabyl(Race, HasUsualPlace) %>% 
   adorn_totals(where = c("row","col"))
 
-data %>%
+upData %>%
   tabyl(Race, Insurance) %>% 
   adorn_totals(where = c("row","col"))
 ```
