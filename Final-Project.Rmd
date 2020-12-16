@@ -1,22 +1,34 @@
 ---
 title: "Final Project"
 author: "Ivy, Juliet, Kathleen"
-date: "12/5/2020"
-output: pdf_document
+date: "12/16/2020"
+output:
+  pdf_document:
+    fig_width: 7.5
+    fig_height: 3
+urlcolor: blue 
+header-includes: 
+   - \usepackage{wrapfig}
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
-  echo = TRUE
+  echo = FALSE,
+  include = FALSE
 )
 library(tidyverse)
 library(Stat2Data)
 library(ipumsr)
 library(janitor)
 library(ggthemes)
+library(kableExtra)
+library(patchwork)
 ```
 
-## Data Cleaning
+```{r}
+# code for report
+# (Report below)
+```
 
 ```{r}
 # read in data
@@ -31,10 +43,10 @@ data <- initialData %>%
   rename(Age = AGE,
          Race = RACEA,
          Income = FTOTINCMEPS,
-         HasUsualPlace = USCMEDTYP,
+         HasUsualOffice = USCMEDTYP,
          Insurance = COVERTYPE) %>%
-  select(DUID, MEPSID, HasUsualPlace, Age, Race, Income, Insurance) %>%
-  filter(HasUsualPlace != 9, # remove before recoding, so doesn't leave empty level
+  select(DUID, MEPSID, HasUsualOffice, Age, Race, Income, Insurance) %>%
+  filter(HasUsualOffice != 9, # remove before recoding, so doesn't leave empty level
          Age >= 18, # adults only
          Age < 85) # remove missing (99), and the big cluster of 85+ (85)
 
@@ -55,7 +67,7 @@ data$Race <- data$Race %>%
          `617` = "Multiple Race"
          )
 
-data$HasUsualPlace <- data$HasUsualPlace %>%
+data$HasUsualOffice <- data$HasUsualOffice %>%
   as.factor() %>%
   recode(`0` = "No",
          `1` = "Yes", # only counting doctor's office
@@ -72,126 +84,107 @@ data$Insurance <- data$Insurance %>%
          )
 ```
 
-```{r, eval=FALSE, include=FALSE}
-# count households - 12096 -> 12087 w/o child households -> 11746 w/o "don't know" either
-num <- data %>%
-  group_by(DUID) %>%
-  summarize(n = n()) %>%
-  nrow()
-```
-
-## Random Sample of People in Households
-
 ```{r}
 set.seed(517)
 
+# sample one adult per household
 upData <- data %>%
-  group_by(DUID) %>% # one person per dwelling unit
+  group_by(DUID) %>%
   sample_n(1)
 ```
 
-```{r, eval=FALSE, include=FALSE}
-# after sample, check for no repeat dwelling units
-noRepeats <- upData %>% # false for repeats, true if no repeats
-  pull(DUID) %>%
-  unique() %>%
-  length() == num # from household count above
+```{r}
+# regression conditions
+emplogitplot1(HasUsualOffice~Age, ngroups = 40, data = upData)
 
+emplogitplot1(HasUsualOffice~Income, ngroups = 40, data = upData)
 ```
 
-12,096 households
+```{r, include = TRUE}
+# ensure sufficient counts
+tableData <- upData
 
-12,087 w/o children
+tableData$HasUsualOffice <- tableData$HasUsualOffice %>%
+  recode(No = "No Office",
+         Yes = "Has Office")
 
-11,746 excluding "don't know" people
+tableData %>%
+  tabyl(Insurance, HasUsualOffice) %>% 
+  adorn_totals(where = c("row","col")) %>%
+  kbl(booktabs = T) %>%
+  kable_styling(position = "center")
 
-```{r}
-# how many multiple race? 443 -> 342
-multi_race <- upData %>%
-  filter(Race == "Multiple Race") %>%
-  nrow()
-  #filter(Race %in% c("Multiple Race, including Asian, excluding Black and White", "Multiple Race, including Asian and Black, excluding White", "Multiple Race, including Asian and White, excluding Black", "Multiple Race, including Black, excluding Asian and White", "Multiple Race, including Black and White, excluding Asian", "Multiple Race, including White, excluding Asian and Black", "Multiple Race, including Asian, White, and Black", "Multiple Race, excluding Asian, White, and Black"))
+tableData %>%
+  tabyl(Race, HasUsualOffice) %>% 
+  adorn_totals(where = c("row","col")) %>% 
+  kbl(booktabs = T) %>%
+  kable_styling(position = "center")
+
+tableData %>%
+  tabyl(Race, Insurance) %>% 
+  adorn_totals(where = c("row","col")) %>% 
+  kbl(booktabs = T) %>%
+  kable_styling(position = "center")
 ```
 
-## Full Model
+```{r}
+# figures
+```
 
 ```{r}
+# income boxplot
+incomePlot <- ggplot(upData, aes(HasUsualOffice, Income, fill=HasUsualOffice)) + 
+  geom_boxplot() +
+  labs(title = "Household Incomes",
+       subtitle = "vs. Whether Individual Has Usual Doctor's Office") +
+  theme(title = element_text(size=8),
+        rect = element_rect(color = "gray80"),
+        axis.title = element_text(size=8),
+        axis.line.x = element_blank(),
+        panel.border = element_blank(),
+        plot.title = element_text(hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5),
+        legend.position = "none")
+
+incomePlot
+```
+
+```{r}
+# insurance stacked bar chart
+insurancePlot <- ggplot(upData, aes(Insurance, fill=HasUsualOffice)) +
+  geom_bar(position="fill")  +
+  labs(title = "Insurance Coverage",
+       subtitle = "Proportion of Individuals with Usual Doctor's Office") +
+  ylab("Proportion with Usual Office") +
+  theme(title = element_text(size=8),
+        rect = element_rect(color = "gray80"),
+        axis.title = element_text(size=8),
+        panel.grid = element_blank(),
+        panel.border = element_blank(),
+        plot.title = element_text(hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5),
+        legend.position = "left",
+        legend.direction = "vertical",
+        legend.title = element_text(size = 8))
+
+insurancePlot
+```
+
+```{r}
+# now, logistic regression models
+```
+
+```{r, include = FALSE}
 # full model
-fullModel <- glm(HasUsualPlace~Age+Race+Income+Insurance, family="binomial", data = upData)
+fullModel <- glm(HasUsualOffice~Age+Race+Income+Insurance, family="binomial", data = upData)
 
 summary(fullModel)
 ```
 
-Age, Black (vs. White), Asian (vs. White), Alaskan Native or Native American (vs. White) (though note small sample size, and only 2*), Income, and Uninsured (vs. Private) all *** significant
-
-Public Insurance (vs. Private), RacePacific Islander, and RaceMultiple Race insignificant (note small sample sizes/weird category combo)
-
-Primary variable - Income significant w/ age, race, insurance coverage constant
-
-Secondary variable - uninsured vs. private significant; public vs. private not significant, w/ age, race, income constant
-
 ```{r}
-# nested G-test for Insurance significant in general
-
-# reduced model no insurance
-noInsuranceModel <- glm(HasUsualPlace~Age+Race+Income, family="binomial", data = upData)
-
-summary(noInsuranceModel)
-```
-
-```{r}
-G_stat <- 15793 - 15550
-
-pchisq(G_stat, df=2, lower.tail = FALSE)
-```
-
-p-value *** significant for Insurance type being significant when accounting for age, race, income
-
-# compare public and uninsured
-
-```{r}
-# reorder levels to compare public ot uninsured
-upData$Insurance <- upData$Insurance %>%
-  factor(levels = c("Public", "Private", "Uninsured"))
-```
-
-```{r}
-# full model w/ public first
-fullModelPublic <- glm(HasUsualPlace~Age+Race+Income+Insurance, family="binomial", data = upData)
-
-summary(fullModelPublic)
-```
-
-
-## Relationship between income and insurance?
-
-```{r}
-# interaction term
-interactionModel <- glm(HasUsualPlace~Age+Race+Income+Insurance+Income*Insurance, family="binomial", data = upData)
-
-summary(interactionModel)
-```
-
-Income:Public insurance and Income:uninsured coefficients not significantly different from Income:Private slope
-
-```{r}
-# reduced no interaction term = full model
-
-# nested G-test for interaction term significant:
-
-G_stat <- 14893 - 14893
-
-pchisq(G_stat, df=2, lower.tail = FALSE)
-```
-
-Interaction term does NOT add significant information to the model (p-value = 1)
-
-## Confidence Intervals
-
-```{r}
-# for income
-beta7 <- 1.495e-06
-SE <- 3.239e-07
+# confidence interval for income
+beta7 <- 1.281e-06
+SE <- 3.295e-07
 zStar <- 1.96
 
 lower <- beta7 - SE * zStar
@@ -202,11 +195,26 @@ exp(lower*10000)
 exp(upper*10000)
 ```
 
+```{r}
+# nested G-test for Insurance significant in general
+
+# reduced model no insurance
+noInsuranceModel <- glm(HasUsualOffice~Age+Race+Income, family="binomial", data = upData)
+
+summary(noInsuranceModel)
+```
 
 ```{r}
-# for private vs. uninsured
-beta9 <- -1.212
-SE <- 8.478e-02
+# nested G-test -> Insurance adds significant info
+G_stat <- 15089 - 14893
+
+pchisq(G_stat, df=2, lower.tail = FALSE)
+```
+
+```{r}
+# confidence interval for private vs. uninsured
+beta9 <- -1.074
+SE <- 8.227e-02
 zStar <- 1.96
 
 lower9 <- beta9 - SE * zStar
@@ -218,9 +226,22 @@ exp(upper9)
 ```
 
 ```{r}
-# for public vs. uninsured
-beta9 <- -1.162
-SE <- 8.859e-02
+# reorder levels to compare public to uninsured
+upData$Insurance <- upData$Insurance %>%
+  factor(levels = c("Public", "Private", "Uninsured"))
+```
+
+```{r}
+# full model w/ public first, to compare public to uninsured
+fullModelPublic <- glm(HasUsualOffice~Age+Race+Income+Insurance, family="binomial", data = upData)
+
+summary(fullModelPublic)
+```
+
+```{r}
+# confidence interval for public vs. uninsured
+beta9 <- -1.015
+SE <- 8.645e-02
 zStar <- 1.96
 
 lower9 <- beta9 - SE * zStar
@@ -231,164 +252,57 @@ exp(lower9)
 exp(upper9)
 ```
 
----------------------------------
-
-# Words, I guess
-
-How much missing data did you have and what did you do about it?
-
-How did you choose which variables to include in your model?
-What kind of model did you fit?
-How did you evaluate the assumptions of this model? Don’t tell us the results, just tell us the steps you took. Think of this as like in a lab report that is reproducible – someone else should be able to download the same data, follow your steps, and get the same results.
-
-
-We fit a logistic regression model predicting HasUsualPlace from Income and Insurance when accounting for Age and Race. Our empirical logit plots with 40 bins (?) appeared linear for both HasUsualPlace vs. Income and HasUsualPlace vs. Age, so we were confident in the linearity of our data. We selected one participant per household to ensure independence, and participants were selected _____ to ensure randomness. (check survey description page 8 https://www.cdc.gov/nchs/nhis/1997-2018.htm) Additionally, we formed 2x2 contingency tables of HasUsualPlace vs. Insurance, HasUsualPlace vs. Race, and Race vs. Insurance to ensure sufficient sample sizes within each category. Our predictions may be least accurate among Alaskan Native or American Indian people, Pacific Islanders, and people of multiple races due to small sample sizes.
-
-
-# Regression Conditions
-
-## Empirical Logit Plot
-
-seems linear
-
 ```{r}
-emplogitplot1(HasUsualPlace~Age, ngroups = 40, data = upData)
+# interaction term - does relationship b/w HasUsualOffice and Income vary by insurance type?
+interactionModel <- glm(HasUsualOffice~Age+Race+Income+Insurance+Income*Insurance, family="binomial", data = upData)
+
+summary(interactionModel)
 ```
 
 ```{r}
-emplogitplot1(HasUsualPlace~Income, ngroups = 40, data = upData)
+# reduced no interaction term = full model
+
+# nested G-test for interaction term -> rounding means both residual deviances match
+# -> p-value of 1
+
+G_stat <- 14893 - 14893
+
+pchisq(G_stat, df=2, lower.tail = FALSE)
 ```
 
+# Introduction
 
-# Multicollinearity
+Healthcare access and insurance coverage are controversial debates in American politics. Depending on insurance types, Americans face various restrictions on which medical offices and services are covered by their insurance, such that out-of-pocket costs become a barrier to healthcare access for many Americans. In this study, we examine factors that may influence whether a person has access to a doctor’s office for usual care, including type of health insurance coverage and household income. We will be controlling for age and race, since previous studies have indicated that these demographics may affect if a person has a usual doctor’s office for medical care. Thus, our primary hypothesis is that there is a statistically significant difference in whether someone has a usual office for medical care based on household income, when controlling for age, race, and insurance coverage type. Our secondary hypothesis is that there is a statistically significant difference in whether someone has a usual office for medical care based on insurance coverage type, when controlling for age, race, and household income. To address these questions, we created a logistic regression model predicting whether someone has a usual doctor’s office from income, insurance type, age, and race. Then, we use a z-test and confidence interval to assess the significance of household income, and we use nested likelihood ratio tests, individual z-tests, and confidence intervals to investigate the significance of insurance coverage type.
 
-```{r}
-upData %>%
-  tabyl(Insurance, HasUsualPlace) %>% 
-  adorn_totals(where = c("row","col"))
+Several prior studies have researched how different factors might impact where individuals go for their medical care. One paper reported that adolescents who are in vulnerable positions, in terms of self-reported mental health, history of abuse and other factors, may be more likely to use the emergency room than a usual doctor’s office (Wilson and Klein, 2000). The same study indicates that using mostly the emergency room may be associated with missing out on needed care. Another paper suggests that type of insurance coverage and having a usual place for care may have an association with the dedication to preventative healthcare (DeVoe et al., 2003). They emphasize the importance of preventative care in both the timely treatment of mental and physical conditions and the reduction of non-urgent emergency room care. Both of these studies use data from the late 1990s, and since the landscape of healthcare in the United States has now changed due to various legislation, it is important to update our models of the role income and insurance coverage play in doctor’s office access. Additionally, most recent studies focus on a particular state or ethnic group, so our investigation will provide a broader view. We chose to focus on the variable household income because, while other studies include variables relating to financial status, they are often control variables. We expect that income and insurance-based healthcare differences have important implications for national health, and so this research examines the impact of income and insurance coverage type as explanatory variables.
 
-upData %>%
-  tabyl(Race, HasUsualPlace) %>% 
-  adorn_totals(where = c("row","col"))
+# Methods
 
-upData %>%
-  tabyl(Race, Insurance) %>% 
-  adorn_totals(where = c("row","col"))
+We obtained data from the Medical Expenditure Panel Survey Household Component (MEPS) for the year 2018 stored in the IPUMS MEPS archive. MEPS is a survey produced by the US Department of Health & Human Services Agency for Healthcare Research and Quality. Surveys were issued to subsets of households that had responded to the National Health Interview Survey in the previous year, which selected participants from a random sample of census clusters to achieve sampling efficiency due to the face-to-face interview format. For 2018, there are 30,461 individuals in the original dataset. Because the surveys were ﬁlled out for households, we sampled one random individual from each household to maintain independence. After this sampling and the other filtering of our data, our sample includes 11,332 individuals. We intend for the sample to represent the adult population of US citizens ages 18 to 84, which is around 248.6 million people (Census Bureau, 2019). 
+
+The outcome variable of our model is HasUsualOffice which is a binary variable: “Yes” meaning an individual visits a doctor’s office for usual medical care, and “No” meaning the individual does not have a usual place or visits the emergency room. We removed respondents who did not know about their usual medical care setting. Our primary explanatory variable is Income, which collects the total income of a household (in US dollars) and includes those in debt with negative income. Our secondary variable is Insurance with types: private, public, or uninsured. Our first control variable is Age, which collects information about a participant’s age in years. Since participants ages 85 and older were grouped together into one age value (85), we filtered out those participants, such that each numerical age a measurement unit of one year. We also eliminated minors because children tend to fall under the head of household’s income and insurance. Children also have additional medical needs compared to adults, and thus may follow a different pattern of medical care. Our other control variable is Race. We recognize that it is important to handle the race variable carefully when attempting to combine different categories; however, the sum of all the eight Multiple Race categories contributes only 1% to the whole sample. Hence, we combined eight Multiple Race categories into one category called Multiple Races. The categories for the race variable now includes White, Black/African-American, Alaskan Native or American Indian, Asian, Paciﬁc Islander, and Multiple Races.
+
+Our empirical logit plots with 40 bins appeared linear for both HasUsualOffice vs. Income and HasUsualOffice vs. Age, so we were confident in the linearity of our data, despite slight curvature in the HasUsualOffice vs. Income plot with fewer bins. We selected one participant per household to ensure independence, and the sampling process used a random sample of census clusters, which is a reasonable approximation of randomness. Thus, the conditions for logistic regression are satisfied. Additionally, we formed 2x2 contingency tables of HasUsualOffice vs. Insurance, HasUsualOffice vs. Race, and Race vs. Insurance to ensure sufficient sample sizes within each category. Our predictions may be least accurate among Alaskan Native or American Indian people, Pacific Islanders, and people of multiple races due to small sample sizes. 
+
+We fit a full logistic regression model predicting HasUsualOffice from Income and Insurance when accounting for Age and Race. To address our primary hypothesis regarding the significance of Income, we performed a z-test to assess whether Income is a significant predictor of HasUsualOffice with Age, Race, and Insurance held constant, and we created a 95% confidence interval for the log odds ratio. Then, to address our secondary hypothesis, we created a reduced model excluding Insurance as a predictor. We compared these two models with a nested likelihood ratio test to see if Insurance adds significant information beyond the explanatory power of Age, Race, and Income. We also used z-tests from our full model to assess for significant differences among each pair of insurance types: Private vs. Uninsured, Public vs. Uninsured, and Private vs. Public, and created 95% confidence intervals for significant log odds ratios. Finally, we added an interaction term between Income and Insurance, and we used a nested likelihood ratio test to assess whether the relationship between HasUsualOffice and Income varies among insurance types.
+
+# Results
+
+Almost every variable in our analysis was significant at the $\alpha = .001$ level, including the controls for age and most races. Most notably for our purposes, we found a statistically significant difference in whether someone has a usual office for medical care based on household income, when controlling for age, race, and insurance coverage type ($z = 3.887$, $p < .001$). Based on the log odds ratio of $1.281*10^{-6}$, our model predicts that if household income increases by \$10,000, the odds that someone has a usual office for medical care increase by a factor of $1.013$, with all other variables held constant. We are 95% confident that this factor falls between $1.006$ and $1.019$.
+
+Additionally, we found that insurance coverage type adds statistically significant additional information to our model predicting HasUsualOffice from income when already accounting for age and race ($G(2) = 196$, $p < .001$). We found a statistically significant difference in whether someone has a usual office for medical care between people with private insurance and uninsured people ($z = -13.053$, $p < .001$), with age, race, and income held constant, and our log odds ratio of $-1.074$ predicts that the odds someone has a usual office for medical care decrease by a factor of $0.342$ for an uninsured person, as compared to someone with private insurance, with age, race, and income held constant. We are 95% confident that this decrease falls between a factor of $0.291$ and $0.401$. We also found a statistically significant difference in whether someone has a usual office for medical care between people with public insurance and uninsured people ($z = -11.737$, $p < .001$), with age, race, and income held constant, and our log odds ratio of $-1.015$ predicts that the odds someone has a usual office for medical care decrease by a factor of $0.362$ for an uninsured person, as compared to someone with public insurance, with age, race, and income held constant. We are 95% confident that this decrease falls between a factor of $0.306$ and $0.429$. However, we found no evidence of a statistically significant difference in whether someone has a usual office for medical care between people with private and public insurance, with age, race, and income held constant ($z = -1.243$, $p = 0.214$). We also found no evidence that the relationship between HasUsualOffice and income varies by insurance type, when holding race and age constant ($G(2) = 0$, $p = 1$).
+
+
+```{r, include = TRUE}
+incomePlot + insurancePlot
 ```
 
-# Questions
+**Figure 1:** Doctor's office access corresponds with higher incomes. We found significant differences between uninsured people and those with private or public insurance, but we found no significant difference between public and private insurance when accounting for income, age, and race.
 
-- allowed to remove age sub-18?
-- how to compare public vs. uninsured
-- assessing multicollinearity with one categorical, one quantitative
-- empirical logit plot for categorical explanatory variable
+# Discussion
 
-# Notes:
+As a measure of healthcare accessibility in the United States, we aimed to establish that household income and type of health insurance coverage are associated with whether a person has a usual doctor’s office as a place for care. Our data confirmed both hypotheses: we found significant differences in doctor’s office access based on household income, when controlling for age, race, and insurance coverage type, and we found that insurance coverage type adds statistically significant additional information to our model predicting doctor’s office access from household income when controlling for age and race.
 
-Pacific Islander, and Alaskan Native or American Indian, may be too small sample sizes
+Despite our filtering, there were sufficient samples to assess this model ($n=11,332$), and we successfully verified the logistic regression conditions including linearity, independence, and randomness. The advantage of using MEPS data is that it was derived from the census, which can reach more participants than a survey circulated by an insurance company or medical institution. In this type of study, reaching a representative sample is very important. Though the National Health Interview Survey limited their interview locations by random sample, a random sample of all US citizen households would be ideal. However, there are still many limitations to our findings. We excluded people under 18 or over 85 in our analysis, and this data has small sample sizes for Alaskan Native or Native American people, Pacific Islanders, and people of multiple races, so our findings may have limited relevance in those groups. We also chose to combine the eight multiple race categories into one, and while those participants who identified as multiple races made up a small portion of the cases, the singular category of multiple races is not representative of those participants. Finally, there is always the risk of question misinterpretation in self-reported data, however, since this data was collected by interviewers, hopefully this effect was minimized. 
 
-```{r}
-data %>%
-  tabyl(Race, Insurance) %>% 
-  adorn_totals(where = c("row","col"))
-```
-
-
-
-
-# Old Code
-
-```{r}
-# rename data for ease of use
-data <- initialData %>%
-  rename(Age = AGE,
-         Race = RACEA,
-         Income = FTOTINCMEPS,
-         HasUsualPlace = USUALPL,
-         Insurance = COVERTYPE)
-
-data$Race <- data$Race %>%
-  as.factor() %>%
-  recode(`100` = "White",
-         `200` = "Black/African-American",
-         `310` = "Alaskan Native or American Indian",
-         `410` = "Asian",
-         `420` = "Pacific Islander",
-         `610` = "Multiple Race, including Asian, excluding Black and White",
-         `611` = "Multiple Race, including Asian and Black, excluding White",
-         `612` = "Multiple Race, including Asian and White, excluding Black",
-         `613` = "Multiple Race, including Black, excluding Asian and White",
-         `614` = "Multiple Race, including Black and White, excluding Asian",
-         `615` = "Multiple Race, including White, excluding Asian and Black",
-         `616` = "Multiple Race, including Asian, White, and Black",
-         `617` = "Multiple Race, excluding Asian, White, and Black"
-         )
-
-data$HasUsualPlace <- data$HasUsualPlace %>%
-  as.factor() %>%
-  recode(`0` = "N/A",
-         `1` = "No",
-         `2` = "Yes",
-         `7` = "N/A",
-         `9` = "N/A"
-         )
-
-data$Insurance <- data$Insurance %>%
-  as.factor() %>%
-  recode(`1` = "Private",
-         `2` = "Public",
-         `4` = "Uninsured"
-         )
-```
-
-
-```{r}
-# info table
-initialData %>%
-  tabyl(USCMEDTYP) %>% 
-  adorn_totals(where = c("row","col")) %>%
-  adorn_pct_formatting(digits = 0)
-```
-
-```{r}
-# for comparing USCMEDTYP, USUALPL, and TYPPLSICK
-test <- initialData %>%
-  filter(USCMEDTYP != 9) %>%
-  select(DUID, MEPSID, USCMEDTYP, USUALPL, TYPPLSICK)
-
-# USCMEDTYP == 1 vs 0, 2, 3, and remove 9 (don't know)
-
-test %>%
-  pull(USCMEDTYP) %>%
-  unique()
-```
-
-
-```{r}
-# households of only children
-children <- data %>%
-  group_by(DUID) %>%
-  summarize(n = n(), maxAge = max(Age)) %>%
-  arrange(maxAge) %>%
-  filter(maxAge < 18) %>%
-  left_join(data, by = "DUID")
-```
-
-## two vars together significant?
-
-```{r}
-# nested G-test for 2 vars add to model
-
-# reduced model no insurance or income
-noInsuranceIncomeModel <- glm(HasUsualPlace~Age+Race, family="binomial", data = upData)
-
-summary(noInsuranceIncomeModel)
-```
-
-```{r}
-G_stat <- 15847 - 15550
-
-pchisq(G_stat, df=3, lower.tail = FALSE)
-```
-
-p-value *** significant for Insurance and Income adding to model beyond Age and Race
+From our model and testing methods, we were able to conclude that income and  insurance type are associated with if a person has a usual place for medical care. However, this is an observational study, and therefore any causal implications are inappropriate. While the understanding of these results are limited to participants based on age and race, this study provides an overview of the important association of income and health insurance coverage type with access to a usual doctor’s office for preventative care. 
